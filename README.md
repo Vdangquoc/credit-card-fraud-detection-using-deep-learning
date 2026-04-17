@@ -1,8 +1,6 @@
 # credit-card-fraud-detection-using-deep-learning
 A deep learning project that detects fraudulent credit card transactions using an ANN model and threshold analysis on the Kaggle fraud dataset.
 
-# Credit Card Fraud Detection Using Deep Learning
-
 ## Project Overview
 
 This project applies deep learning to detect fraudulent credit card transactions. It is a binary classification problem where:
