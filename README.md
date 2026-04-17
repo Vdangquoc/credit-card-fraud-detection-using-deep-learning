@@ -1,6 +1,8 @@
 # credit-card-fraud-detection-using-deep-learning
 A deep learning project that detects fraudulent credit card transactions using an ANN model and threshold analysis on the Kaggle fraud dataset.
 
+# Credit Card Fraud Detection Using Deep Learning
+
 ## Project Overview
 
 This project applies deep learning to detect fraudulent credit card transactions. It is a binary classification problem where:
@@ -8,27 +10,42 @@ This project applies deep learning to detect fraudulent credit card transactions
 - **0 = normal transaction**
 - **1 = fraudulent transaction**
 
-I chose this topic because fraud detection is a practical and important problem in finance. Even though fraudulent transactions make up only a very small part of the dataset, missing them can lead to significant financial loss. This makes the task both challenging and meaningful.
+I chose this topic because fraud detection is an important real-world problem in finance. Even though fraudulent transactions represent only a very small part of the data, failing to detect them can lead to serious financial loss. This makes the task both practical and challenging, especially because the dataset is highly imbalanced.
 
 ---
 
 ## Dataset
 
-The project uses the **Credit Card Fraud Detection** dataset from Kaggle.  
-The dataset includes:
+This project uses the **Credit Card Fraud Detection** dataset from Kaggle.
 
-- `Time`
-- `Amount`
-- `V1` to `V28`
-- `Class` as the target variable
+The dataset contains credit card transactions made by European cardholders in **September 2013**. It includes transactions that occurred over **two days**, with:
 
-A key challenge of this dataset is that it is **highly imbalanced**, with fraudulent transactions representing only a very small percentage of all records.
+- **284,807 total transactions**
+- **492 fraudulent transactions**
+- fraud cases representing only **0.172%** of the dataset
+
+This makes the dataset **highly imbalanced**, which is one of the main challenges of the project.
+
+Another important characteristic is that most variables have already been transformed using **PCA** for confidentiality reasons. As a result:
+
+- **V1 to V28** are principal components obtained with PCA
+- **Time** and **Amount** are the only features not transformed by PCA
+- **Class** is the target variable:
+  - `0` = normal transaction
+  - `1` = fraudulent transaction
+
+In particular:
+
+- **Time** represents the number of seconds elapsed between each transaction and the first transaction in the dataset
+- **Amount** represents the transaction amount
+
+Because the dataset is extremely imbalanced, accuracy alone is not a reliable evaluation metric. For this type of problem, metrics such as **Precision, Recall, F1-score**, and especially the **Area Under the Precision-Recall Curve (AUPRC)** are more meaningful than simple accuracy.
 
 ### Class Distribution
 
-![Class Distribution](images/class_distribution.png)
+![Class Distribution](class_distribution.png)
 
-This chart clearly shows that fraud cases are much fewer than non-fraud cases. Because of this imbalance, accuracy alone is not enough to judge model performance.
+This chart clearly shows that fraud cases are much fewer than non-fraud cases. Because of this imbalance, the project must go beyond accuracy and focus more on fraud-sensitive metrics.
 
 ---
 
@@ -36,19 +53,19 @@ This chart clearly shows that fraud cases are much fewer than non-fraud cases. B
 
 ### Transaction Amount Distribution
 
-![Transaction Amount Distribution](images/amount_distribution.png)
+![Transaction Amount Distribution](amount_distribution.png)
 
 Most transactions have relatively small values, while only a small number have large amounts.
 
 ### Transaction Time Distribution
 
-![Transaction Time Distribution](images/time_distribution.png)
+![Transaction Time Distribution](time_distribution.png)
 
 This figure shows how transactions are distributed over time.
 
 ### Correlation Heatmap
 
-![Correlation Heatmap](images/correlation_heatmap.png)
+![Correlation Heatmap](correlation_heatmap.png)
 
 The heatmap provides an overview of the relationships between variables in the dataset.
 
@@ -65,13 +82,13 @@ The main preprocessing steps were:
 - scaling `Time` and `Amount`
 - splitting the data into training and testing sets
 
-I only scaled `Time` and `Amount` because the other features had already been transformed in the original dataset.
+I only scaled `Time` and `Amount` because, according to the dataset description, features `V1` to `V28` had already been transformed using PCA.
 
 ---
 
 ## Model
 
-I used **(ANN)** model for this project.
+I used an **Artificial Neural Network (ANN)** for this project.
 
 This model was chosen because it can learn non-linear patterns in numerical data and works well for binary classification tasks.
 
@@ -81,13 +98,13 @@ This model was chosen because it can learn non-linear patterns in numerical data
 
 ### Training and Validation Loss
 
-![Training and Validation Loss](images/training_loss.png)
+![Training and Validation Loss](training_loss.png)
 
 The loss curves decrease over time, which indicates that the model learned useful patterns from the data and improved during training.
 
 ### Training and Validation Accuracy
 
-![Training and Validation Accuracy](images/training_accuracy.png)
+![Training and Validation Accuracy](training_accuracy.png)
 
 The accuracy curves show that the model achieved strong overall performance. However, because the dataset is highly imbalanced, accuracy is not the most important metric.
 
@@ -99,21 +116,15 @@ To better evaluate the model, I compared predictions at different thresholds.
 
 ### Threshold = 0.5
 
-![Confusion Matrix 0.5](images/confusion_matrix_05.png)
+![Confusion Matrix 0.5](confusion_matrix_05.png)
 
 This is the default threshold and provides a basic balance between fraud detection and false alarms.
 
 ### Threshold = 0.3
 
-![Confusion Matrix 0.3](images/confusion_matrix_03.png)
+![Confusion Matrix 0.3](confusion_matrix_03.png)
 
 A lower threshold makes the model more sensitive to fraud. This usually improves recall, meaning more fraud cases are detected, but it can also increase false positives.
-
-### Threshold = 0.8
-
-![Confusion Matrix 0.8](images/confusion_matrix_08.png)
-
-A higher threshold makes the model more conservative. This may reduce false positives, but it can also miss more fraud cases.
 
 ---
 
